@@ -47,7 +47,7 @@ var app = {
 	    var match = hash.match(app.detailsURL);
 	    if (match) {
 	        this.store.findById(Number(match[1]), function(employee) {
-	            $('body').html(new EmployeeView(employee).render().el);
+	            self.slidePage(new EmployeeView(employee).render());
 	        });
 	    } 
 	},
@@ -101,7 +101,7 @@ var app = {
         );
         var homeView = new HomeView(self.store);
         self.registerEvents();
-        $('body').html(homeView.render().el);
+        self.route();
     }
 
 };
