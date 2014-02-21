@@ -1,0 +1,85 @@
+
+<!DOCTYPE html>
+<html>
+<!--
+  Created using jsbin.com
+  Source can be edited via http://jsbin.com/AMag/2/edit
+-->
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+<meta charset=utf-8 />
+<title>JS Bin</title>
+
+<style id="jsbin-css">
+#radar{
+  position:relative;
+  width:321px;
+  height:321px;
+  background:#222 url(http://i.stack.imgur.com/vY6Tl.png);
+  border-radius:320px;
+  overflow:hidden;
+}
+#rad{
+  position:absolute;
+  width:321px;
+  height:321px; background:url(http://i.stack.imgur.com/fbgUD.png);
+}
+.obj{
+  background:#cf5;
+  position:absolute;
+  border-radius:10px;
+  width:4px;
+  height:4px;
+  margin-top:-2px;
+  margin-left:-2px;
+  box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
+  opacity:0.2;
+}
+
+</style>
+</head>
+<body>
+  
+  
+  
+  <div id="radar">
+    <div id="rad"></div>
+    <div class="obj" data-x="120" data-y="65"></div>
+    <div class="obj" data-x="140" data-y="185"></div>
+    <div class="obj" data-x="220" data-y="35"></div>
+    <div class="obj" data-x="120" data-y="235"></div>
+  </div>
+
+  
+  
+<script>
+$(function() {
+  
+    var $rad = $('#rad'),
+        $obj = $('.obj'),
+        deg = 0,
+        rad = 160.5; //   = 321/2
+  
+  $obj.each(function(){
+    var data = $(this).data(),
+        pos = {X:data.x, Y:data.y},
+        getAtan = Math.atan2(pos.X-rad, pos.Y-rad),
+        getDeg = ~~(-getAtan/(Math.PI/180) + 180);
+    $(this).css({left:pos.X, top:pos.Y}).attr('data-atDeg', getDeg);
+  });
+
+    (function rotate() {      
+      $rad.css({transform: 'rotate('+ deg +'deg)'});
+      $('[data-atDeg='+deg+']').stop().fadeTo(0,1).fadeTo(1700,0.2);
+
+        // LOOP
+        setTimeout(function() {
+            deg = ++deg%360;
+            rotate();
+        }, 25);
+    })();
+});
+</script>
+
+</body>
+</html>

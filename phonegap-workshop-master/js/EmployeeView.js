@@ -6,6 +6,7 @@ var EmployeeView = function(employee) {
         this.el.on('click', '.add-location-btn', this.addLocation);
         this.el.on('click', '.add-contact-btn', this.addToContacts);
         this.el.on('click', '.change-pic-btn', this.changePicture);
+        this.el.on('click', '.radar-btn', this.showRadar);
   };
   
   this.render = function() {
@@ -71,7 +72,17 @@ var EmployeeView = function(employee) {
 	    return false;
 	};
 	
-	
+  this.showRadar = function(event) {
+  	event.preventDefault();
+  	var radarView = new RadarView();
+  	$('body').html(radarView.render().el);
+  	
+  	for (;;) {
+  		$('body').html(radarView.show().el);
+  	}
+  	
+  	return false;
+  };
   
    
   this.initialize(); 
