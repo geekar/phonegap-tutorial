@@ -7,12 +7,21 @@ var EmployeeView = function(employee) {
         this.el.on('click', '.add-contact-btn', this.addToContacts);
         this.el.on('click', '.change-pic-btn', this.changePicture);
         this.el.on('click', '.radar-btn', this.showRadar);
+        this.el.on('click', '.button', this.back);
   };
   
   this.render = function() {
 	    this.el.html(EmployeeView.template(employee));
 	    return this;
   };
+  
+   this.back = function(event) {
+	    //event.preventDefault();
+	   // homeView = new HomeView(app.store);
+	    app.slidePage(homeView.render(),'left');
+	    window.location.hash = "";
+	    return false;
+   }
   
   this.addLocation = function(event) {
 	    event.preventDefault();
@@ -75,12 +84,17 @@ var EmployeeView = function(employee) {
   this.showRadar = function(event) {
   	event.preventDefault();
   	var radarView = new RadarView();
-  	$('body').html(radarView.render().el);
-  	
+  	var homeView = new HomeView();
+    //$('body').html(homeView.render().el);
+  	app.slidePage(radarView.render(),'right');
+  	//$('body').html(radarView.render().el);
+  	$('body').css('background-color','#000');
   	for (;;) {
+  		//app.slidePage(radarView.show().el,'left');
   		$('body').html(radarView.show().el);
+  		//$page.html(radarView.show().el);
+  		//$(radarView.show().el).attr('class', 'page stage-center transition');
   	}
-  	
   	return false;
   };
   

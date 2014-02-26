@@ -40,9 +40,7 @@ var RadarView = function() {
 
 		
 	};
-	
-	
-	
+
 	this.initialize(); 
 }
 

@@ -37,22 +37,23 @@ var app = {
 	    var hash = window.location.hash;
 	    if (!hash) {
 	         if (this.homePage) {
-		            this.slidePage(this.homePage);
+		            this.slidePage(this.homePage,'right');
 		     } else {
 		            this.homePage = new HomeView(this.store).render();
-		            this.slidePage(this.homePage);
+		            this.slidePage(this.homePage,'right');
 		     }
 	        return;
 	    }
 	    var match = hash.match(app.detailsURL);
 	    if (match) {
 	        this.store.findById(Number(match[1]), function(employee) {
-	            self.slidePage(new EmployeeView(employee).render());
+	        	this.employeePage = new EmployeeView(employee).render();
+	            self.slidePage(employeePage,'right');
 	        });
 	    } 
 	},
 	
-	slidePage: function(page) {
+	slidePage: function(page,direction) {
 	 
 	    var currentPageDest,
 	    self = this;
@@ -68,7 +69,7 @@ var app = {
 	    // Cleaning up: remove old pages that were moved out of the viewport
 	    $('.stage-right, .stage-left').not('.homePage').remove();
 	 
-	    if (page === app.homePage) {
+	    if (direction == 'right') {
 	        // Always apply a Back transition (slide from left) when we go back to the search page
 	        $(page.el).attr('class', 'page stage-left');
 	        currentPageDest = "stage-right";
@@ -88,6 +89,8 @@ var app = {
 	        $(page.el).attr('class', 'page stage-center transition');
 	        self.currentPage = page;
 	    });
+	    
+	    return currentPageDest;
 	 
 	},
 
@@ -99,11 +102,14 @@ var app = {
         		//self.showAlert('Inicializacion Ok','Estado');
         	}
         );
-        var homeView = new HomeView(self.store);
+        homeView = new HomeView(self.store);
         self.registerEvents();
         self.route();
-    }
-
+    },
+    
 };
+
+var homeView = null;
+
 
 app.initialize();

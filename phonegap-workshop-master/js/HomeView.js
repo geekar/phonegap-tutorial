@@ -10,14 +10,7 @@ var HomeView = function(store) {
 	    this.el.html(HomeView.template());
 	    return this;
   };
-  
-  this.findByName = function() {
-       console.log('findByName');
-       store.findByName($('.search-key').val(), function(employees) {
-        $('.employee-list').html(HomeView.liTemplate(employees));
-   		 });       
-  };
-  
+    
   this.findByName = function() {
   		console.log('findByName');
     	store.findByName($('.search-key').val(), function(employees) {
