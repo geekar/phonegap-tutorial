@@ -251,6 +251,15 @@ li>a.tappable-active {
   height:4px;
   margin-top:-2px;
   margin-left:-2px;
+  color:#000;
   box-shadow:0 0 10px 5px rgba(100,255,0,0.5);
-  opacity:0.2;
+  //opacity:0.2;
+  opacity:1.0;
+}
+.location {
+	color:#cf5;
+}
+
+.distance {
+	color:#fc5;
 }
