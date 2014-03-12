@@ -33,7 +33,10 @@ function proyectPointOfInterest(a1,b1,a2,b2,d) {
 function drawArrowNorth() {
 	var arrow = $('#arrow');
     var arrowOrientation = 360 - headingArrow;
-     arrow.css({transform: 'rotate('+ arrowOrientation +'deg)'});
+    arrow.css({transform: 'rotate('+ arrowOrientation +'deg)'});
+     //  arrow.css(
+    //       '-webkit-transform','rotate(' + arrowOrientation + 'deg)'
+   // );
 }
 
 // convert degrees to radians
@@ -135,7 +138,7 @@ var RadarView = function() {
 		   (function rotate() {      
 	      $rad.css({transform: 'rotate('+ deg +'deg)'});
 	      $('[data-atDeg='+deg+']').stop().fadeTo(0,1).fadeTo(1700,0.2);
-	     // drawArrowNorth();
+	      drawArrowNorth();
 	     
 	        // LOOP
 	        setTimeout(function() {
