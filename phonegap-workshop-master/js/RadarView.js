@@ -1,3 +1,9 @@
+
+
+
+
+
+
 function distanceToUser (currLat,currLon,latitudeP1,longitudeP1) {
     var R = 6371; // km
 	var dLat = (latitudeP1-currLat).toRad();
@@ -24,6 +30,12 @@ function proyectPointOfInterest(a1,b1,a2,b2,d) {
 	return [x,y];
 }
 
+function drawArrowNorth() {
+	var arrow = $('#arrow');
+    var arrowOrientation = 360 - headingArrow;
+     arrow.css({transform: 'rotate('+ arrowOrientation +'deg)'});
+}
+
 // convert degrees to radians
 Number.prototype.toRad = function() 
 { 
@@ -45,6 +57,8 @@ var RadarView = function() {
 	  return this;
   };
   
+			
+  
    
 	   
   this.show = function() {    
@@ -55,44 +69,65 @@ var RadarView = function() {
 		  
 		  printLocation = function() {
 			    console.log('getLocation');
-			    navigator.geolocation.getCurrentPosition(
-			        function(position) {
-			        	latitude = position.coords.latitude;
-			        	longitude = position.coords.longitude;
-			        	loc = position.coords.latitude + ',' + position.coords.longitude;
-			            $('.location', this.el).html(loc);
-			            d = distanceToUser(latitude,longitude,latitude1,longitude1);
-			            $('.distance', this.el).html(d);
-			            
-			            var point = proyectPointOfInterest(latitude,longitude,latitude1,longitude1,d);
-			             var $radar = $('#radar');
-	  
-       $radar.append('<div class="obj" data-x="'+point[0]+'" data-y="'+point[1]+'" style="left:'+point[0]+'px; top: '+point[1]+'px; opacity:0.2;" />');
-       
-        var $obj = $('.obj');
-
-
-	  
-		  $obj.each(function(){
-		    var data = $(this).data();
-		    var pos = {X:data.x, Y:data.y};
-		    var getAtan = Math.atan2(pos.X-rad, pos.Y-rad);
-		    var getDeg = ~~(-getAtan/(Math.PI/180) + 180);
-		    $(this).css({left:pos.X, top:pos.Y}).attr('data-atDeg', getDeg);
-		  });
-			           			         
-			        },
-			        function() {
-			            alert('Error getting location');
-			        });
+			    navigator.geolocation.getCurrentPosition(onCurrentPositionSuccess,onCurrentPositionFailure);
 			    return false;
 		  };
-			
+		  
+		 // Start watching the compas
+		 startWatch = function() {
+		    // Update compass every 3 seconds
+		    var options = { frequency: 3000 };
+		    navigator.compass.watchHeading(compassOnSuccess,compassOnError, options);
+		    return false;
+		 }
+		  
+		  //startWatch();
+		  
+		  
+		function onCurrentPositionSuccess(position) {
+		     	latitude = position.coords.latitude;
+		     	longitude = position.coords.longitude;
+		     	loc = position.coords.latitude + ',' + position.coords.longitude;
+		         $('.location', this.el).html(loc);
+		         d = distanceToUser(latitude,longitude,latitude1,longitude1);
+		         $('.distance', this.el).html(d);
+		         var point = proyectPointOfInterest(latitude,longitude,latitude1,longitude1,d);
+		         var $radar = $('#radar');
+		 					$radar.append('<div class="obj" data-x="'+point[0]+'" data-y="'+point[1]+'" style="left:'+point[0]+'px; top: '+point[1]+'px; opacity:0.2;" />');
+		 
+		  				var $obj = $('.obj');
+			$obj.each(function(){
+			    var data = $(this).data();
+			    var pos = {X:data.x, Y:data.y};
+			    var getAtan = Math.atan2(pos.X-rad, pos.Y-rad);
+			    var getDeg = ~~(-getAtan/(Math.PI/180) + 180);
+			    $(this).css({left:pos.X, top:pos.Y}).attr('data-atDeg', getDeg);
+			});       			         
+		};
+		
+		function onCurrentPositionFailure() {
+		  	alert('Error getting location');
+		};
+		
+
+
+		function compassOnSuccess(heading) {   
+		   var $trueHeading = $('#trueHeading');
+		   headingArrow = heading;
+		   $trueHeading.html(heading);
+		}
+		    
+		function compassOnError(error) {
+		    alert('Error getting location');
+		}
+	
 
 		  
 		
 			
-		   if (loc==null) printLocation();
+		   if (loc==null) {
+		   	printLocation();
+		   startWatch(); }
 		   
 		   //if (loc!=null) console.log(distanceToUser(latitude1,longitude1));
 		   
@@ -100,8 +135,8 @@ var RadarView = function() {
 		   (function rotate() {      
 	      $rad.css({transform: 'rotate('+ deg +'deg)'});
 	      $('[data-atDeg='+deg+']').stop().fadeTo(0,1).fadeTo(1700,0.2);
+	     // drawArrowNorth();
 	     
-	
 	        // LOOP
 	        setTimeout(function() {
 	            deg = ++deg%360;
@@ -117,10 +152,11 @@ var RadarView = function() {
 var loc;
 var latitude;
 var longitude;
+var headingArrow;
 
 var latitude1 = 41.394325;
 var longitude1 = 2.175179;
-//var latitude1 = 42.33139169122773;
-//var longitude1 = 2.625731;
+var latitude1 = 42.33139169122773;
+var longitude1 = 2.625731;
 
 RadarView.template = Handlebars.compile($("#radar-tpl").html());	

@@ -69,7 +69,7 @@ var app = {
 	    // Cleaning up: remove old pages that were moved out of the viewport
 	    $('.stage-right, .stage-left').not('.homePage').remove();
 	 
-	    if (direction == 'right') {
+	    if (direction == 'left') {
 	        // Always apply a Back transition (slide from left) when we go back to the search page
 	        $(page.el).attr('class', 'page stage-left');
 	        currentPageDest = "stage-right";

@@ -18,7 +18,7 @@ var EmployeeView = function(employee) {
    this.back = function(event) {
 	    //event.preventDefault();
 	   // homeView = new HomeView(app.store);
-	    app.slidePage(homeView.render(),'left');
+	    app.slidePage(homeView.render(),'right');
 	    window.location.hash = "";
 	    return false;
    }
